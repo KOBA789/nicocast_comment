@@ -1,5 +1,11 @@
 #koba789-comment-list {
+  margin: 0;
+  padding: 0;
   list-style-type: none;
+}
+
+#koba789-comment-list li:nth-child(even) {
+  background-color: #ddd;
 }
 
 #koba789-comment-list li:hover {
