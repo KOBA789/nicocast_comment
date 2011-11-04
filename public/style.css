@@ -1,0 +1,7 @@
+#koba789-comment-list {
+  list-style-type: none;
+}
+
+#koba789-comment-list li:hover {
+  background-color: #cfc;
+}
