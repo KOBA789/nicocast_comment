@@ -1,11 +1,20 @@
 #koba789-comment-container {
-  overflow: auto;
   position: absolute;
   left: 1px;
   top: 1px;
   bottom: 1px;
   right: 1px;
   border: #000 solid 1px;
+  font-size: 12pt;
+}
+
+#koba789-comment-list-container {
+  overflow: auto;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 31px;
+  right: 0px;
 }
 
 #koba789-comment-list {
@@ -20,4 +29,20 @@
 
 #koba789-comment-list li:hover {
   background-color: #cfc;
+}
+
+#koba789-comment-input {
+  border-style: solid;
+  border-color: #000;
+  border-width: 1px 0 0 0;
+  display: block;
+  height: 30px;
+  outline: none;
+  font-size: 12pt;
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
 }

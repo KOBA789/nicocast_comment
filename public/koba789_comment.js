@@ -7,15 +7,27 @@ var koba789 = {};
   var muteMessage = '###このコメントは表示されません###',
       destination = '' || null;
 
-  var commentList, commentContainer;
+  var commentList, listContainer, commentInput;
 
   /**
    * Initial Function
    */
   function init () {
     commentList = document.getElementById('koba789-comment-list');
-    commentContainer = document.getElementById('koba789-comment-container');
+    listContainer = document.getElementById('koba789-comment-list-container');
+    commentInput = document.getElementById('koba789-comment-input');
 
+    commentInput.onkeypress = function (event) {
+      if (event.keyCode === 13) {
+	return onNewComment.apply(this, arguments);
+      } else {
+	return true;
+      }
+    };
+
+    /**
+     *  socket.io settings
+     */
     if (location.href.match(/^file:/)) return;
 
     var socket = io.connect(destnation);
@@ -36,38 +48,55 @@ var koba789 = {};
    */
   function onCommentReceived (comment) {
     var text = comment.text;
-    var isMuted = filter(text);
+    var isMuted = muteFilter(text);
 
-    var isScrolled = isScrolledBottom();
-    addComment(text, isMuted);
-    if (isScrolled) scrollToBottom();
+    var scrollFlg = isScrolledToBottom();
+    addComment(text, scrollFlg, isMuted);
   }
 
   /**
-   * Comment Filter
+   * Comment filter
    */
-  function filter () {
+  function muteFilter () {
     return false;
   }
 
   /**
-   * Append Comment
+   * Append comment
    */
-  function addComment (text, isMuted) {
+  function addComment (text, scrollFlg, isMuted) {
     var newComment = document.createElement('li');
     newComment.textContent = newComment.innerText = isMuted ? muteMessage : text;
     commentList.appendChild(newComment);
+    if (scrollFlg) scrollToBottom();
   }
-
+  
+  /**
+   * Scroll comment container to bottom
+   */
   function scrollToBottom () {
-    commentContainer.scrollTop = commentContainer.scrollHeight - commentContainer.clientHeight;
+    var scrollHeight = listContainer.scrollHeight,
+	clientHeight = listContainer.clientHeight;
+    listContainer.scrollTop = scrollHeight - clientHeight;
   }
 
-  function isScrolledBottom () {
-    var scrollHeight = commentContainer.scrollHeight,
-	scrollTop = commentContainer.scrollTop,
-	clientHeight = commentContainer.clientHeight;
+  /**
+   * Was scrolled to bottom
+   */
+  function isScrolledToBottom () {
+    var scrollHeight = listContainer.scrollHeight,
+	scrollTop = listContainer.scrollTop,
+	clientHeight = listContainer.clientHeight;
     return scrollHeight <= clientHeight || scrollTop >= scrollHeight - clientHeight;
+  }
+
+  /**
+   * Enter a new comment Handler
+   */
+  function onNewComment() {
+    var text = commentInput.value;
+    commentInput.value = '';
+    addComment(text, true);
   }
 
   koba789.init = init;
