@@ -7,14 +7,27 @@ var koba789 = {};
   var muteMessage = '###このコメントは表示されません###',
       destination = '' || null;
 
+  var commentList;
+
   /**
    * Initial Function
    */
   function init () {
-    this.commentList = document.getElementById('koba789-comment-list');
+    commentList = document.getElementById('koba789-comment-list');
     
+    if (location.href.match(/^file:/)) return;
+
     var socket = io.connect(destnation);
     socket.on('comment', onCommentReceived);
+  }
+
+  /**
+   * Test
+   */
+  function test () {
+    for (var i = 1; i <= 10; i ++) {
+      onCommentReceived({text: 'テストメッセージ' + i.toString()});
+    }
   }
 
   /**
@@ -36,11 +49,12 @@ var koba789 = {};
   /**
    * Append Comment
    */
-  function addCommnet (text, isMuted) {
+  function addComment (text, isMuted) {
     var newComment = document.createElement('li');
     newComment.textContent = newComment.innerText = isMuted ? muteMessage : text;
-    this.commentList.appendChild(newComment);
+    commentList.appendChild(newComment);
   }
 
   koba789.init = init;
+  koba789.test = test;
 })();
