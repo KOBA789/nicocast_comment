@@ -1,3 +1,13 @@
+#koba789-comment-container {
+  overflow: auto;
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  bottom: 1px;
+  right: 1px;
+  border: #000 solid 1px;
+}
+
 #koba789-comment-list {
   margin: 0;
   padding: 0;
