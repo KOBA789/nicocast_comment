@@ -49,7 +49,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('post', function (text) {
-    if (typeof text === 'string' && text.length <= MAX_TEXT_LENGTH) {
+    if (typeof text === 'string' && text.length > 0 && text.length <= MAX_TEXT_LENGTH) {
       socket.get('channelName', function (err, channelName) {
 	var comment = {text: text};
 	socket.broadcast.to(channelName).emit('comment', comment);
