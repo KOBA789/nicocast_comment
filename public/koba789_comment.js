@@ -156,5 +156,4 @@ var koba789 = {};
   }
 
   koba789.init = init;
-  koba789.test = test;
 })();
