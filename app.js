@@ -12,8 +12,8 @@ const MAX_TEXT_LENGTH = 140,
 handler = static.createHandler(fs.realpathSync('./public'));
 app = http.createServer(function (req, res) {
   var path = url.parse(req.url).pathname;
-  if (path == '/') {
-    path = 'index.html';
+  if (path === '/') {
+    path = '/index.html';
   }
   if (!handler.handle(path, req, res)) {
     res.writeHead(404);
