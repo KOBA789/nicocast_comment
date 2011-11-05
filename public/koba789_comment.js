@@ -18,10 +18,22 @@ var koba789 = {};
 
   var socket, isLocal = false;
 
+  var dev = {
+    channelName: 'debug-channel',
+    isLocal: false
+  };
+
   /**
    * Initial Function
    */
   function init () {
+    /**
+     * Switch debug mode
+     */
+    if (location.hostname !== 'live.nicocast.com') {
+      dev.isLocal = true;
+    }
+
     commentList = document.getElementById('koba789-comment-list');
     listContainer = document.getElementById('koba789-comment-list-container');
     commentInput = document.getElementById('koba789-comment-input');
@@ -36,16 +48,12 @@ var koba789 = {};
 
     /**
      *  socket.io settings
-     */
-    if (window.location.href.match(/^file:/)) {
-      isLocal = true;
-      setTimeout(onConnect, 0);
-    } else {
-      socket = io.connect(destination);
-      socket.on('connect', onConnect);
-      socket.on('comment', onCommentReceive);
-      socket.on('log', onLogReceive);
-    }
+     */    
+    socket = io.connect(destination);
+    socket.on('connect', onConnect);
+    socket.on('comment', onCommentReceive);
+    socket.on('log', onLogReceive);
+    socket.emit('channelName', getChannelName());
   }
 
   /**
@@ -55,7 +63,6 @@ var koba789 = {};
     for (var i = 1; i <= 100; i ++) {
       onCommentReceive({text: 'テストメッセージ' + i.toString()});
     }
-    socket.set('channel', 'koba789');
   }
 
   /**
@@ -83,7 +90,18 @@ var koba789 = {};
   function onLogReceive (log) {
     
   }
-  
+
+  /**
+   * Get the Channel Name
+   */
+  function getChannelName () {
+    if (!dev.isLocal) {
+      return location.pathname.match(/\/channel\/([a-zA-Z0-9_-]+)/)[1];
+    } else {
+      return location.search.substring(1);
+    }
+  }
+
   /**
    * Comment filter
    */
@@ -126,9 +144,10 @@ var koba789 = {};
   function onEnterComment() {
     var text = commentInput.value;
     commentInput.value = '';
+   
     addComment(text, true);
-    
-    if (!isLocal) socket.emit('post', text);
+    socket.emit('post', text);
+    return true;
   }
 
   koba789.init = init;

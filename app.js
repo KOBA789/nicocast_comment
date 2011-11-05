@@ -31,7 +31,7 @@ io.sockets.on('connection', function (socket) {
 
   var channelName = '';
 
-  socket.emit('getChannelName', function (_channelName) {
+  socket.on('channelName', function (_channelName) {
     channelName = _channelName;
     socket.join(channelName);
   });
