@@ -3,9 +3,8 @@
     <title>NicoCast Comment Viewer</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="koba789_comment.js"></script>
   </head>
-  <body onload="koba789.init()">
+  <body>
     <h1>NicoCast Comment Viewer</h1>
     <p>
       ニコキャストのコメントビューワ。それなりに動く。
@@ -13,18 +12,10 @@
     <p>
       こちらもお試しください: <a href="?channelA">チャンネルA</a>, <a href="?channelB">チャンネルB</a>
     </p>
-    <div style="width: 426px; height: 414px;">
-
-      <div style="position: relative;width: 100%; height: 100%;">
-	<div id="koba789-comment-container">
-	  <div id="koba789-comment-list-container">
-	    <ul id="koba789-comment-list">
-	    </ul>
-	  </div>
-	  <input id="koba789-comment-input" type="text" disabled="true" value="コメント準備中">
-	</div>
-      </div>
-
+    <div style="width: 426px; height: 414px;" id="commentPlayerContainer">
+      <p>
+	hoge
+      </p>
     </div>
   </body>
 </html>

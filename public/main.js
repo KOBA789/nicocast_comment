@@ -20,7 +20,8 @@ var koba789 = {};
 
   var dev = {
     channelName: 'debug-channel',
-    isLocal: false
+    isLocal: false,
+    isBookmarklet: true
   };
 
   /**
@@ -33,6 +34,8 @@ var koba789 = {};
     if (location.hostname !== 'live.nicocast.com') {
       dev.isLocal = true;
     }
+    
+    if (dev.isBookmarklet) buildDom();
 
     commentList = document.getElementById('koba789-comment-list');
     listContainer = document.getElementById('koba789-comment-list-container');
@@ -146,13 +149,28 @@ var koba789 = {};
   /**
    * Enter a new comment Handler
    */
-  function onEnterComment() {
+  function onEnterComment () {
     var text = commentInput.value;
     commentInput.value = '';
    
     addComment(text, true);
     socket.emit('post', text);
     return true;
+  }
+
+  function buildDom () {
+    var html
+	  = '<div style="position:relative;width:100%;height:100%;">'
+	  + '<div id="koba789-comment-container">'
+	  + '<div id="koba789-comment-list-container">'
+	  + '<ul id="koba789-comment-list">'
+	  + '</ul>'
+	  + '</div>'
+	  + '<input id="koba789-comment-input" type="text" disabled="true" value="コメント準備中">'
+	  + '</div>'
+	  + '</div>';
+    var commentPlayer = document.getElementById('commentPlayerContainer');
+    commentPlayer.innerHTML = html;
   }
 
   koba789.init = init;
