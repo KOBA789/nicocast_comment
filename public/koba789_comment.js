@@ -7,7 +7,16 @@ var koba789 = {};
   var muteMessage = '###このコメントは表示されません###',
       destination = '' || null;
 
+  /**
+   * DOM Elements
+   */
   var commentList, listContainer, commentInput;
+
+  /**
+   * Global Variables
+   */
+
+  var socket, isLocal = false;
 
   /**
    * Initial Function
@@ -19,7 +28,7 @@ var koba789 = {};
 
     commentInput.onkeypress = function (event) {
       if (event.keyCode === 13) {
-	return onNewComment.apply(this, arguments);
+	return onEnterComment.apply(this, arguments);
       } else {
 	return true;
       }
@@ -28,10 +37,15 @@ var koba789 = {};
     /**
      *  socket.io settings
      */
-    if (location.href.match(/^file:/)) return;
-
-    var socket = io.connect(destnation);
-    socket.on('comment', onCommentReceived);
+    if (window.location.href.match(/^file:/)) {
+      isLocal = true;
+      setTimeout(onConnect, 0);
+    } else {
+      socket = io.connect(destination);
+      socket.on('connect', onConnect);
+      socket.on('comment', onCommentReceive);
+      socket.on('log', onLogReceive);
+    }
   }
 
   /**
@@ -39,14 +53,23 @@ var koba789 = {};
    */
   function test () {
     for (var i = 1; i <= 100; i ++) {
-      onCommentReceived({text: 'テストメッセージ' + i.toString()});
+      onCommentReceive({text: 'テストメッセージ' + i.toString()});
     }
+    socket.set('channel', 'koba789');
   }
 
   /**
-   * Comment Received Handler
+   * Socket.IO Connect Handler
    */
-  function onCommentReceived (comment) {
+  function onConnect () {
+    commentInput.value = '';
+    commentInput.disabled = false;
+  }
+
+  /**
+   * Comment Receive Handler
+   */
+  function onCommentReceive (comment) {
     var text = comment.text;
     var isMuted = muteFilter(text);
 
@@ -54,6 +77,13 @@ var koba789 = {};
     addComment(text, scrollFlg, isMuted);
   }
 
+  /**
+   * Log Receive Handler
+   */
+  function onLogReceive (log) {
+    
+  }
+  
   /**
    * Comment filter
    */
@@ -93,10 +123,12 @@ var koba789 = {};
   /**
    * Enter a new comment Handler
    */
-  function onNewComment() {
+  function onEnterComment() {
     var text = commentInput.value;
     commentInput.value = '';
     addComment(text, true);
+    
+    if (!isLocal) socket.emit('post', text);
   }
 
   koba789.init = init;

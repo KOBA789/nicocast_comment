@@ -1,0 +1,11 @@
+{
+  "author": "KOBA789",
+  "name": "nicocast_comment",
+  "description": "ニコキャスのコメント欄改善プロジェクト",
+  "version": "0.0.1",
+  "dependencies": {
+    "socket.io": ">=0.8.6",
+    "redis": "*",
+    "hiredis": "*"
+  }
+}

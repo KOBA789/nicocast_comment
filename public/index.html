@@ -2,6 +2,7 @@
   <head>
     <title>NicoCast Comment Viewer</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
     <script src="koba789_comment.js"></script>
   </head>
   <body onload="koba789.init();koba789.test();">
@@ -14,9 +15,10 @@
       <div style="position: relative;width: 100%; height: 100%;">
 	<div id="koba789-comment-container">
 	  <div id="koba789-comment-list-container">
-	    <ul id="koba789-comment-list"></ul>
+	    <ul id="koba789-comment-list">
+	    </ul>
 	  </div>
-	  <input id="koba789-comment-input" type="text">
+	  <input id="koba789-comment-input" type="text" disabled="true" value="コメント準備中">
 	</div>
       </div>
 
