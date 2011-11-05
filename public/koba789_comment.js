@@ -103,7 +103,7 @@ var koba789 = {};
     if (!dev.isLocal) {
       return location.pathname.match(/\/channel\/([a-zA-Z0-9_-]+)/)[1];
     } else {
-      return location.search.substring(1);
+      return location.search.substring(1) || dev.channelName;
     }
   }
 
