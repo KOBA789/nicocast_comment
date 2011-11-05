@@ -5,7 +5,7 @@
   bottom: 1px;
   right: 1px;
   border: #000 solid 1px;
-  font-size: 12pt;
+  font-size: 11pt;
 }
 
 #koba789-comment-list-container {
@@ -23,6 +23,10 @@
   list-style-type: none;
 }
 
+#koba789-comment-list li {
+  padding-left: 6px;
+}
+
 #koba789-comment-list li:nth-child(even) {
   background-color: #ddd;
 }
@@ -38,7 +42,7 @@
   display: block;
   height: 30px;
   outline: none;
-  font-size: 12pt;
+  font-size: 11pt;
   position: absolute;
   bottom: 2px;
   left: 0;
