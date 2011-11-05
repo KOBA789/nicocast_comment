@@ -5,7 +5,7 @@ var koba789 = {};
    * Const Variables
    */
   var muteMessage = '###このコメントは表示されません###',
-      destination = 'http://localhost:8124/' || null;
+      destination = 'http://koba789.node-ninja.com:2525/' || null;
 
   /**
    * DOM Elements

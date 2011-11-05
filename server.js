@@ -7,7 +7,7 @@ var http = require('http'),
     handler, app, io;
 
 const MAX_TEXT_LENGTH = 140,
-      PORT = 8124;
+      PORT = 2525;
 
 handler = static.createHandler(fs.realpathSync('./public'));
 app = http.createServer(function (req, res) {
