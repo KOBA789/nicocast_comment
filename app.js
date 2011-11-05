@@ -38,12 +38,12 @@ io.configure(function () {
 });
 
 io.sockets.on('connection', function (socket) {
-  client.lrange(function (err, comments) {
-    if (err) return;
-    socket.emit('log', comments);
-  });
-
   socket.on('channelName', function (channelName) {
+    if (typeof channelName !== 'string') return;
+    client.lrange('clog-' + channelName, 0, 100, function (err, log) {
+      log.reverse();
+      socket.emit('log', log);
+    });
     socket.set('channelName', channelName);
     socket.join(channelName);
   });
@@ -51,7 +51,11 @@ io.sockets.on('connection', function (socket) {
   socket.on('post', function (text) {
     if (typeof text === 'string' && text.length <= MAX_TEXT_LENGTH) {
       socket.get('channelName', function (err, channelName) {
-	socket.broadcast.to(channelName).emit('comment', {text: text});
+	var comment = {text: text};
+	socket.broadcast.to(channelName).emit('comment', comment);
+	client.lpush('clog-' + channelName, JSON.stringify(comment), function (err) {
+	  
+	});
       });
     }
   });
