@@ -174,4 +174,8 @@ var koba789 = {};
   }
 
   koba789.init = init;
+
+  if (dev.isBookmarklet) {
+    koba789.init();
+  }
 })();
