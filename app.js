@@ -23,22 +23,36 @@ app = http.createServer(function (req, res) {
 
 app.listen(PORT);
 io = require('socket.io').listen(app);
+
+function canConnect (handshakeData) {
+  if (handshakeData.xdomain === false) return true;
+  var originHost = url.parse(handshakeData.headers.origin).hostname;
+  if (originHost === 'live.nicocast.com' || originHost === 'localhost') return true;
+  return false;
+}
+
+io.configure(function () {
+  io.set('authorization', function (handshakeData, callback) {
+    callback(null, canConnect(handshakeData));
+  });
+});
+
 io.sockets.on('connection', function (socket) {
   client.lrange(function (err, comments) {
     if (err) return;
     socket.emit('log', comments);
   });
 
-  var channelName = '';
-
-  socket.on('channelName', function (_channelName) {
-    channelName = _channelName;
+  socket.on('channelName', function (channelName) {
+    socket.set('channelName', channelName);
     socket.join(channelName);
   });
 
   socket.on('post', function (text) {
     if (typeof text === 'string' && text.length <= MAX_TEXT_LENGTH) {
-      socket.broadcast.to(channelName).emit('comment', {text: text});
+      socket.get('channelName', function (err, channelName) {
+	socket.broadcast.to(channelName).emit('comment', {text: text});
+      });
     }
   });
 });

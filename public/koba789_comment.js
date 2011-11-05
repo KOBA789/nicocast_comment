@@ -5,7 +5,7 @@ var koba789 = {};
    * Const Variables
    */
   var muteMessage = '###このコメントは表示されません###',
-      destination = '' || null;
+      destination = 'http://localhost:8124/' || null;
 
   /**
    * DOM Elements
@@ -88,7 +88,12 @@ var koba789 = {};
    * Log Receive Handler
    */
   function onLogReceive (log) {
-    
+    for (var i = 0; i < log.length; i ++) {
+      var comment = JSON.parse(log[i]);
+      var text = comment.text;
+      var isMuted = muteFilter(text);
+      addComment(text, true, isMuted);
+    }
   }
 
   /**
